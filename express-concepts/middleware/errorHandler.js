@@ -2,8 +2,8 @@
 
 // custom error class  
 
-class APIError extends Error{
-  constructor(message, statusCode){
+class APIError extends Error {
+  constructor(message, statusCode) {
     super(message)
     this.statusCode = statusCode
     this.name = 'APIError';  // set the error type of API Error
@@ -19,7 +19,7 @@ const asyncHandler = (fn) => (req, res, next) => {
 const globalErrorhandler = (err, req, res, next) => {
   console.error(err.stack);   //log the err stack
 
-  if(err instanceof APIError) { 
+  if (err instanceof APIError) {
     return res.status(err.statusCode).json({
       status: 'Error',
       message: err.message
@@ -27,17 +27,17 @@ const globalErrorhandler = (err, req, res, next) => {
   }
 
   //handle mongoose validation
-  else if(err.name === 'validationError') {
+  else if (err.name === 'validationError') {
     return res.status(400).json({
       status: 'error',
-      message: 'validation error'  
+      message: 'validation error'
     })
   } else {
     return res.status(500).json({
       status: 'error',
-      message: 'An unexpected error occured'  
+      message: 'An unexpected error occured'
     });
   }
 };
 
-module.exports = {APIError, globalErrorhandler}
+module.exports = { APIError, asyncHandler, globalErrorhandler }

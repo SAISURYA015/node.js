@@ -2,7 +2,7 @@
 
 const urlVersioning = (version) => (req, res, next) =>{
   if(req.path.startsWith(`/api/${version}`)) {
-    next()
+    next();
   } else {
     res.status(404).json({
       success: false,
