@@ -6,7 +6,8 @@ const express = require('express')
 const { configureCors } = require('./config/corsConfig');
 const { requestLogger, addTimeStamp } = require('./middleware/customMiddleware');
 const { globalErrorhandler} = require('./middleware/errorHandler');
-const {urlVersioning} = require('./middleware/apiVersioning')
+const {urlVersioning} = require('./middleware/apiVersioning');
+const {createRateLimiter} = require('./middleware/rateLimiting')
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(requestLogger)
 app.use(addTimeStamp)
 
 app.use(configureCors());
+app.use(createRateLimiter(100, 15*60*100)) //100 request for 15 minutes
 app.use(express.json());
 
 app.use('api/v1', urlVersioning('v1'))
